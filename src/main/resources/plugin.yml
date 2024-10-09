@@ -1,0 +1,23 @@
+name: 'Warp'
+main: dev.drekamor.warp.WarpPlugin
+version: '1.0.0'
+api-version: '1.21'
+
+commands:
+  warp:
+    description: Warp to a location
+    permission: warps.use
+    usage: "Usage: /warp <warp>"
+  warps:
+    description: Manage warps
+    permission: warps.use
+    usage: "Usage: /warp [add | list | delete] <warp | none> <gamemode | none>"
+
+
+permissions:
+  warps.use:
+    description: Allows using warps
+    default: true
+  warps.manage:
+    description: Allows managing warps
+    default: op
