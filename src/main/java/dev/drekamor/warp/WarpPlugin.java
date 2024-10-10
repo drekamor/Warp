@@ -7,7 +7,9 @@ import dev.drekamor.warp.database.DatabaseCredentials;
 import dev.drekamor.warp.database.DatabaseManager;
 import dev.drekamor.warp.handler.WarpHandler;
 import dev.drekamor.warp.handler.WarpsHandler;
+import dev.drekamor.warp.listener.PlayerDeathListener;
 import dev.drekamor.warp.util.Cache;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,6 +36,8 @@ public class WarpPlugin extends JavaPlugin {
 
         this.getCommand("warps").setExecutor(new WarpsCommand(this.warpsHandler));
         this.getCommand("warp").setExecutor(new WarpCommand(this.warpHandler));
+
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
     }
 
     public Cache getCache() {
