@@ -29,7 +29,13 @@ public class WarpPlugin extends JavaPlugin {
     public void onEnable() {
         configManager = new ConfigurationManager(this.getConfig());
         databaseManager = new DatabaseManager(this, configManager.getDatabaseCredentials());
-        cache = new Cache(databaseManager.getWarpNames(), databaseManager.getWarps());
+
+        Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                cache = new Cache(databaseManager.getWarpNames(), databaseManager.getWarps());
+            }
+        });
 
         warpsHandler = new WarpsHandler(this);
         warpHandler = new WarpHandler(this);

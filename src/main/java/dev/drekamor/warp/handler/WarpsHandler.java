@@ -1,8 +1,8 @@
 package dev.drekamor.warp.handler;
 
 import dev.drekamor.warp.WarpPlugin;
-import dev.drekamor.warp.database.DatabaseManager;
 import dev.drekamor.warp.util.Warp;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -54,10 +54,15 @@ public class WarpsHandler {
                 args[2]
         );
 
-        if(plugin.getDatabaseManager().addWarp(warp)) {
-            plugin.getCache().addWarp(warp);
-            sender.sendMessage("Successfully saved warp %s".formatted(warp.name()));
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                if(plugin.getDatabaseManager().addWarp(warp)) {
+                    plugin.getCache().addWarp(warp);
+                    sender.sendMessage("Successfully saved warp %s".formatted(warp.name()));
+                }
+            }
+        });
         return true;
     }
 
@@ -97,10 +102,15 @@ public class WarpsHandler {
             return true;
         }
 
-        if(plugin.getDatabaseManager().deleteWarp(args[1])) {
-            plugin.getCache().deleteWarp(args[1]);
-            sender.sendMessage("Successfully deleted warp %s".formatted(args[1]));
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                if(plugin.getDatabaseManager().deleteWarp(args[1])) {
+                    plugin.getCache().deleteWarp(args[1]);
+                    sender.sendMessage("Successfully deleted warp %s".formatted(args[1]));
+                }
+            }
+        });
         return true;
     }
 }

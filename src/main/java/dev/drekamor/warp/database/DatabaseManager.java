@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.drekamor.warp.WarpPlugin;
 import dev.drekamor.warp.util.Warp;
+import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,18 +48,23 @@ public class DatabaseManager {
     }
 
     private void initialiseTables() {
-        Connection connection = this.getConnection();
+        final Connection connection = this.getConnection();
         if(connection == null) {
             plugin.severe("Failed to obtain a connection. Aborting table initialisation");
             return;
         }
-        try {
-            connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (name VARCHAR(64) UNIQUE PRIMARY KEY, world VARCHAR(64), x REAL, y REAL, z REAL, pitch REAL, yaw REAL, gamemode VARCHAR(16));").execute();
-            connection.close();
-        } catch (SQLException e) {
-            plugin.severe("Failed to initialise tables");
-            plugin.severe(Arrays.toString(e.getStackTrace()));
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (name VARCHAR(64) UNIQUE PRIMARY KEY, world VARCHAR(64), x REAL, y REAL, z REAL, pitch REAL, yaw REAL, gamemode VARCHAR(16));").execute();
+                    connection.close();
+                } catch (SQLException e) {
+                    plugin.severe("Failed to initialise tables");
+                    plugin.severe(Arrays.toString(e.getStackTrace()));
+                }
+            }
+        });
     }
 
     public HashMap<String, Warp> getWarps() {
