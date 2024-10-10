@@ -6,17 +6,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
-public class PlayerDeathListener implements Listener {
+public class PlayerRespawnListener implements Listener {
     private final WarpPlugin plugin;
 
-    public PlayerDeathListener(WarpPlugin plugin) {
+    public PlayerRespawnListener(WarpPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    private void onPlayerDeath(PlayerDeathEvent event) {
+    private void onPlayerRespawn(PlayerRespawnEvent event) {
         if(plugin.getCache().getPlayerLocation(event.getPlayer()) == null) {
             return;
         }
@@ -31,6 +31,6 @@ public class PlayerDeathListener implements Listener {
                 warp.pitch()
         );
 
-        event.getPlayer().setRespawnLocation(location);
+        event.setRespawnLocation(location);
     }
 }
